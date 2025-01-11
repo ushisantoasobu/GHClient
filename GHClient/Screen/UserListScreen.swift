@@ -7,12 +7,18 @@
 
 import SwiftUI
 
+enum ScreenPath: Hashable {
+    case userDetail(userID: String)
+}
+
 struct UserListScreen: View {
+
+    @State private var screenPath: [ScreenPath] = []
 
     @ObservedObject private var viewModel = UserListViewModel()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $screenPath) {
             Group {
                 if viewModel.isFetching {
                     ProgressView()
@@ -20,7 +26,7 @@ struct UserListScreen: View {
                     List {
                         ForEach(viewModel.users) { user in
                             Button {
-                                
+                                screenPath.append(.userDetail(userID: user.id))
                             } label: {
                                 UserListView(user: user)
                             }
@@ -31,6 +37,12 @@ struct UserListScreen: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("ユーザ一覧")
+            .navigationDestination(for: ScreenPath.self) { path in
+                switch path {
+                case .userDetail(let userID):
+                    UserDetailScreen(userID: userID)
+                }
+            }
         }
         .searchable(text: $viewModel.searchText)
         .onSubmit(of: .search) {

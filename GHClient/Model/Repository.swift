@@ -13,6 +13,7 @@ struct Repository: Identifiable {
     let language: String
     let starCount: Int
     let description: String
+    let urlString: String
 }
 
 extension Repository {
@@ -22,7 +23,8 @@ extension Repository {
             name: "Alamofire",
             language: "Swiift",
             starCount: 12345,
-            description: "Swift Networking Library"
+            description: "Alamofire is an HTTP networking library written in Swift.",
+            urlString: "https://github.com/Alamofire/Alamofire"
         )
     }
 }
