@@ -11,7 +11,7 @@ import SwiftUI
 struct GHClientApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            UserListScreen()
         }
     }
 }
