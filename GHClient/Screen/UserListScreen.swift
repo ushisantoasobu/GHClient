@@ -44,7 +44,16 @@ struct UserListView: View {
     let user: User
 
     var body: some View {
-        Text(user.name)
+        HStack {
+            if let url = URL(string: user.imageURLString) {
+                AsyncImage(url: url)
+                    .frame(width: 44, height: 44)
+                    .clipped()
+            } else {
+                
+            }
+            Text(user.name)
+        }
     }
 }
 
