@@ -15,3 +15,17 @@ struct UserDetail: Identifiable {
     let followerCount: Int
     let followingCount: Int
 }
+
+extension UserDetail {
+    
+    static func make() -> UserDetail {
+        .init(
+            id: UUID().uuidString,
+            imageURLString: "https://picsum.photos/120/120",
+            name: "ushisantoasobu",
+            fullName: "佐藤 俊輔",
+            followerCount: 12,
+            followingCount: 4
+        )
+    }
+}

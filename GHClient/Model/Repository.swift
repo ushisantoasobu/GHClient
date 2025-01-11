@@ -14,3 +14,15 @@ struct Repository: Identifiable {
     let starCount: Int
     let description: String
 }
+
+extension Repository {
+    static func make() -> Repository {
+        .init(
+            id: UUID().uuidString,
+            name: "Alamofire",
+            language: "Swiift",
+            starCount: 12345,
+            description: "Swift Networking Library"
+        )
+    }
+}
