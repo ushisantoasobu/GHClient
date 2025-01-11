@@ -51,13 +51,21 @@ struct UserDetailScreen: View {
 
             ForEach(viewModel.repositories) { repository in
                 Button {
-                    //
+                    viewModel.onRepositoryTapped(repository: repository)
                 } label: {
                     UserDetailRepositoryView(repository: repository)
                 }
             }
         }
         .listStyle(.plain)
+        .sheet(item: $viewModel.presentingRepository, content: { repository in
+            if let url = URL(string: repository.urlString) {
+                SafariViewRepresentable(url: url)
+            } else {
+                // TODO: logging
+                EmptyView()
+            }
+        })
         .task {
             await viewModel.onAppear()
         }
@@ -92,6 +100,8 @@ class UserDetailViewModel: ObservableObject {
     @Published var userDetail: UserDetail?
     @Published var repositories: [Repository] = []
 
+    @Published var presentingRepository: Repository?
+
     private let userID: String
     private let userRepository: any UserRepository
     private let repoRepository: any RepoRepository
@@ -116,5 +126,9 @@ class UserDetailViewModel: ObservableObject {
         } catch {
             // TODO
         }
+    }
+
+    func onRepositoryTapped(repository: Repository) {
+        presentingRepository = repository
     }
 }
