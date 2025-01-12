@@ -9,7 +9,10 @@ import Foundation
 
 protocol UserRepository {
     func fetch(userName: String) async throws -> [User]
-    func fetch(userID: Int) async throws -> UserDetail
+}
+
+protocol UserDetailRepository {
+    func fetch(userName: String) async throws -> UserDetail
 }
 
 struct UserRepoRepositoryImpl: UserRepository {
@@ -25,7 +28,7 @@ struct UserRepoRepositoryImpl: UserRepository {
 
         var request = URLRequest(url: queryAddedURL)
         request.httpMethod = "GET"
-//        request.setValue("token \(token)", forHTTPHeaderField: "Authorization") // TODO:
+        //        request.setValue("token \(token)", forHTTPHeaderField: "Authorization") // TODO:
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
@@ -34,6 +37,9 @@ struct UserRepoRepositoryImpl: UserRepository {
         let usersResponse = try decoder.decode(UsersResponse.self, from: data)
         return usersResponse.toModel()
     }
+}
+
+struct UserDetailRepositoryImpl: UserDetailRepository {
 
     func fetch(userName: String) async throws -> UserDetail {
         let urlString = "https://api.github.com/users/\(userName)"
@@ -56,6 +62,7 @@ struct UserRepoRepositoryImpl: UserRepository {
 }
 
 struct MockUserRepository: UserRepository {
+    
     func fetch(userName: String) async throws -> [User] {
         try! await Task.sleep(for: .seconds(2))
 
@@ -66,8 +73,11 @@ struct MockUserRepository: UserRepository {
             .makeExample()
         ]
     }
+}
 
-    func fetch(userID: Int) async throws -> UserDetail {
+struct MockUserDetailRepository: UserDetailRepository {
+
+    func fetch(userName: String) async throws -> UserDetail {
         try! await Task.sleep(for: .seconds(2))
         return .make()
     }

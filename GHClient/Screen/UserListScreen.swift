@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum ScreenPath: Hashable {
-    case userDetail(userID: Int)
+    case userDetail(userName: String)
 }
 
 struct UserListScreen: View {
@@ -26,7 +26,7 @@ struct UserListScreen: View {
                     List {
                         ForEach(viewModel.users) { user in
                             Button {
-                                screenPath.append(.userDetail(userID: user.id))
+                                screenPath.append(.userDetail(userName: user.name))
                             } label: {
                                 UserListView(user: user)
                             }
@@ -39,8 +39,8 @@ struct UserListScreen: View {
             .navigationTitle("ユーザ一覧")
             .navigationDestination(for: ScreenPath.self) { path in
                 switch path {
-                case .userDetail(let userID):
-                    UserDetailScreen(userID: userID)
+                case .userDetail(let userName):
+                    UserDetailScreen(userName: userName)
                 }
             }
         }

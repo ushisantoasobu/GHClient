@@ -9,8 +9,8 @@ import SwiftUI
 
 struct UserDetailScreen: View {
 
-    init(userID: Int) {
-        self.viewModel = .init(userID: userID)
+    init(userName: String) {
+        self.viewModel = .init(userName: userName)
     }
 
     @ObservedObject private var viewModel: UserDetailViewModel
@@ -82,19 +82,20 @@ struct UserDetailRepositoryView: View {
 
             HStack {
                 Text("\(repository.starCount)")
-                Text(repository.language)
+                Text(repository.language ?? "-")
             }
 
-            Text(repository.description)
+            Text(repository.description ?? "-")
                 .lineLimit(2)
         }
     }
 }
 
 #Preview {
-    UserDetailScreen(userID: 1)
+    UserDetailScreen(userName: "hoge")
 }
 
+@MainActor
 class UserDetailViewModel: ObservableObject {
 
     @Published var userDetail: UserDetail?
@@ -102,29 +103,30 @@ class UserDetailViewModel: ObservableObject {
 
     @Published var presentingRepository: Repository?
 
-    private let userID: Int
-    private let userRepository: any UserRepository
+    private let userName: String
+    private let userDetailRepository: any UserDetailRepository
     private let repoRepository: any RepoRepository
 
     init(
-        userID: Int,
-        userRepository: any UserRepository = UserRepoRepositoryImpl(),
-        repoRepository: any RepoRepository = MockRepoRepository()
+        userName: String,
+        userDetailRepository: any UserDetailRepository = UserDetailRepositoryImpl(),
+        repoRepository: any RepoRepository = RepoRepositoryImpl()
     ) {
-        self.userID = userID
-        self.userRepository = userRepository
+        self.userName = userName
+        self.userDetailRepository = userDetailRepository
         self.repoRepository = repoRepository
     }
 
     func onAppear() async {
         do {
-            async let userDetail = try await userRepository.fetch(userID: userID)
-            async let repositories = try await repoRepository.fetch(userID: userID)
+            async let userDetail = try await userDetailRepository.fetch(userName: userName)
+            async let repositories = try await repoRepository.fetch(userName: userName)
 
             self.userDetail = try await userDetail
             self.repositories = try await repositories
         } catch {
             // TODO
+            print("userDetailAPI: \(error)")
         }
     }
 
