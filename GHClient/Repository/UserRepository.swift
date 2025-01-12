@@ -14,9 +14,9 @@ protocol UserRepository {
 
 struct UserRepoRepositoryImpl: UserRepository {
 
-    let urlString = "https://api.github.com/search/users"
-
     func fetch(userName: String) async throws -> [User] {
+        let urlString = "https://api.github.com/search/users"
+
         guard let url = URL(string: urlString) else {
             fatalError() // TODO
         }
@@ -35,8 +35,23 @@ struct UserRepoRepositoryImpl: UserRepository {
         return usersResponse.toModel()
     }
 
-    func fetch(userID: Int) async throws -> UserDetail {
-        fatalError()
+    func fetch(userName: String) async throws -> UserDetail {
+        let urlString = "https://api.github.com/users/\(userName)"
+
+        guard let url = URL(string: urlString) else {
+            fatalError() // TODO
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+//        request.setValue("token \(token)", forHTTPHeaderField: "Authorization") // TODO:
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let userDetailResponse = try decoder.decode(UserDetailResponse.self, from: data)
+        return userDetailResponse.toModel()
     }
 }
 

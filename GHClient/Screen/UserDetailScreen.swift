@@ -31,7 +31,7 @@ struct UserDetailScreen: View {
 
                         Text(userDetail.name)
 
-                        Text(userDetail.fullName)
+                        Text(userDetail.fullName ?? "-")
 
                         HStack {
                             VStack {
@@ -108,7 +108,7 @@ class UserDetailViewModel: ObservableObject {
 
     init(
         userID: Int,
-        userRepository: any UserRepository = MockUserRepository(),
+        userRepository: any UserRepository = UserRepoRepositoryImpl(),
         repoRepository: any RepoRepository = MockRepoRepository()
     ) {
         self.userID = userID
