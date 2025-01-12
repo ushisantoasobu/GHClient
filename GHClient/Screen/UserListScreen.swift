@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum ScreenPath: Hashable {
-    case userDetail(userID: String)
+    case userDetail(userID: Int)
 }
 
 struct UserListScreen: View {
@@ -74,6 +74,7 @@ struct UserListView: View {
     UserListScreen()
 }
 
+// TODO: 別ファイル化
 @MainActor
 class UserListViewModel: ObservableObject {
 
@@ -83,7 +84,7 @@ class UserListViewModel: ObservableObject {
 
     private let userRepository: any UserRepository
 
-    init(userRepository: any UserRepository = MockUserRepository()) {
+    init(userRepository: any UserRepository = UserRepoRepositoryImpl()) {
         self.userRepository = userRepository
     }
 
@@ -95,6 +96,7 @@ class UserListViewModel: ObservableObject {
                 isFetching = false
             } catch {
                 isFetching = false
+                print(error)
             }
         }
     }

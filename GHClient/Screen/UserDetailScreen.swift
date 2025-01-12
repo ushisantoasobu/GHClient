@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UserDetailScreen: View {
 
-    init(userID: String) {
+    init(userID: Int) {
         self.viewModel = .init(userID: userID)
     }
 
@@ -92,7 +92,7 @@ struct UserDetailRepositoryView: View {
 }
 
 #Preview {
-    UserDetailScreen(userID: "hoge")
+    UserDetailScreen(userID: 1)
 }
 
 class UserDetailViewModel: ObservableObject {
@@ -102,12 +102,12 @@ class UserDetailViewModel: ObservableObject {
 
     @Published var presentingRepository: Repository?
 
-    private let userID: String
+    private let userID: Int
     private let userRepository: any UserRepository
     private let repoRepository: any RepoRepository
 
     init(
-        userID: String,
+        userID: Int,
         userRepository: any UserRepository = MockUserRepository(),
         repoRepository: any RepoRepository = MockRepoRepository()
     ) {

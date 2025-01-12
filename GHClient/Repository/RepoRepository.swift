@@ -9,11 +9,11 @@ import Foundation
 
 // MEMO: 名前がわかりづらいが「Githubのレポジトリを取り扱うRepository」
 protocol RepoRepository {
-    func fetch(userID: String) async throws -> [Repository]
+    func fetch(userID: Int) async throws -> [Repository]
 }
 
 struct MockRepoRepository: RepoRepository {
-    func fetch(userID: String) async throws -> [Repository] {
+    func fetch(userID: Int) async throws -> [Repository] {
         try! await Task.sleep(for: .seconds(1))
 
         return [
