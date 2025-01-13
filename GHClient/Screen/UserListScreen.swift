@@ -20,7 +20,7 @@ struct UserListScreen: View {
     var body: some View {
         NavigationStack(path: $screenPath) {
             Group {
-                if viewModel.isFetching {
+                if viewModel.users.isEmpty && viewModel.isFetching {
                     ProgressView()
                 } else {
                     List {
@@ -30,6 +30,13 @@ struct UserListScreen: View {
                             } label: {
                                 UserListView(user: user)
                             }
+                        }
+
+                        if viewModel.hasNext {
+                            ListLoadingView()
+                                .onAppear {
+                                    viewModel.onScrollToBottom()
+                                }
                         }
                     }
                     .listStyle(.plain)
@@ -69,6 +76,14 @@ struct UserListView: View {
     }
 }
 
+// TODO: 共通化
+struct ListLoadingView: View {
+
+    var body: some View {
+        ProgressView()
+    }
+}
+
 #Preview {
     // memo: https://stackoverflow.com/questions/56613157/enable-keyboard-in-xcode-preview
     UserListScreen()
@@ -81,8 +96,11 @@ class UserListViewModel: ObservableObject {
     @Published var searchText = ""
     @Published var users: [User] = []
     @Published var isFetching = false
+    @Published var hasNext = false
 
     private let userRepository: any UserRepository
+
+    private var page: Int = 1
 
     init(userRepository: any UserRepository = UserRepoRepositoryImpl()) {
         self.userRepository = userRepository
@@ -90,14 +108,35 @@ class UserListViewModel: ObservableObject {
 
     func onSearch() {
         Task {
-            isFetching = true
-            do {
-                users = try await userRepository.fetch(userName: searchText)
-                isFetching = false
-            } catch {
-                isFetching = false
-                print(error)
+            await fetch(refresh: true)
+        }
+    }
+
+    func onScrollToBottom() {
+        guard !isFetching else { return }
+        guard hasNext else { return }
+
+        Task {
+            await fetch(refresh: false)
+        }
+    }
+
+    private func fetch(refresh: Bool) async {
+        isFetching = true
+        do {
+            let response = try await userRepository.fetch(userName: searchText, page: page)
+            if refresh {
+                users = response.list
+            } else {
+                users.append(contentsOf: response.list)
             }
+            hasNext = response.hasNext
+            page += 1
+            isFetching = false
+        } catch {
+            hasNext = false
+            isFetching = false
+            print(error)
         }
     }
 }

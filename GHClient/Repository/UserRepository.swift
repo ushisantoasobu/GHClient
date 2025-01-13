@@ -8,7 +8,7 @@
 import Foundation
 
 protocol UserRepository {
-    func fetch(userName: String) async throws -> [User]
+    func fetch(userName: String, page: Int) async throws -> Paging<User>
 }
 
 protocol UserDetailRepository {
@@ -17,14 +17,16 @@ protocol UserDetailRepository {
 
 struct UserRepoRepositoryImpl: UserRepository {
 
-    func fetch(userName: String) async throws -> [User] {
+    func fetch(userName: String, page: Int) async throws -> Paging<User> {
         let urlString = "https://api.github.com/search/users"
 
         guard let url = URL(string: urlString) else {
             fatalError() // TODO
         }
 
-        let queryAddedURL = url.appending(queryItems: [.init(name: "q", value: userName)])
+        let queryAddedURL = url
+            .appending(queryItems: [.init(name: "q", value: userName)])
+            .appending(queryItems: [.init(name: "page", value: "\(page)")])
 
         var request = URLRequest(url: queryAddedURL)
         request.httpMethod = "GET"
@@ -35,7 +37,13 @@ struct UserRepoRepositoryImpl: UserRepository {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let usersResponse = try decoder.decode(UsersResponse.self, from: data)
-        return usersResponse.toModel()
+
+        let linkHeader = (response as? HTTPURLResponse)?.allHeaderFields["Link"] as? String
+        let hasNextPage = linkHeader?.contains("rel=\"next\"") ?? false
+
+        print("@@@@@ hasNextPage: \(hasNextPage)")
+
+        return .init(list: usersResponse.toModel(), hasNext: hasNextPage)
     }
 }
 
@@ -63,15 +71,15 @@ struct UserDetailRepositoryImpl: UserDetailRepository {
 
 struct MockUserRepository: UserRepository {
     
-    func fetch(userName: String) async throws -> [User] {
+    func fetch(userName: String, page: Int) async throws -> Paging<User> {
         try! await Task.sleep(for: .seconds(2))
 
-        return [
+        return .init(list: [
             .makeExample(),
             .makeExample(),
             .makeExample(),
             .makeExample()
-        ]
+        ], hasNext: false)
     }
 }
 
