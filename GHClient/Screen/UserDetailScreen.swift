@@ -56,6 +56,13 @@ struct UserDetailScreen: View {
                     UserDetailRepositoryView(repository: repository)
                 }
             }
+
+            if viewModel.hasNext {
+                ListLoadingView()
+                    .onAppear {
+                        viewModel.onScrollToBottom()
+                    }
+            }
         }
         .listStyle(.plain)
         .sheet(item: $viewModel.presentingRepository, content: { repository in
@@ -100,12 +107,15 @@ class UserDetailViewModel: ObservableObject {
 
     @Published var userDetail: UserDetail?
     @Published var repositories: [Repository] = []
+    @Published var hasNext = false
 
     @Published var presentingRepository: Repository?
 
     private let userName: String
     private let userDetailRepository: any UserDetailRepository
     private let repoRepository: any RepoRepository
+
+    private var page: Int = 1
 
     init(
         userName: String,
@@ -118,19 +128,33 @@ class UserDetailViewModel: ObservableObject {
     }
 
     func onAppear() async {
-        do {
-            async let userDetail = try await userDetailRepository.fetch(userName: userName)
-            async let repositories = try await repoRepository.fetch(userName: userName)
+        await fetch()
+    }
 
-            self.userDetail = try await userDetail
-            self.repositories = try await repositories
-        } catch {
-            // TODO
-            print("userDetailAPI: \(error)")
+    func onScrollToBottom() {
+        Task {
+            await fetch()
         }
     }
 
     func onRepositoryTapped(repository: Repository) {
         presentingRepository = repository
+    }
+
+    private func fetch() async {
+        do {
+            async let userDetail = try await userDetailRepository.fetch(userName: userName)
+            async let repositories = try await repoRepository.fetch(userName: userName, page: page)
+
+            self.userDetail = try await userDetail
+
+            let repositoriesResponse = try await repositories
+            self.repositories = repositoriesResponse.list
+            hasNext = repositoriesResponse.hasNext
+            page += 1
+        } catch {
+            // TODO
+            print("userDetailAPI: \(error)")
+        }
     }
 }

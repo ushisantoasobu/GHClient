@@ -9,19 +9,22 @@ import Foundation
 
 // MEMO: 名前がわかりづらいが「Githubのレポジトリを取り扱うRepository」
 protocol RepoRepository {
-    func fetch(userName: String) async throws -> [Repository]
+    func fetch(userName: String, page: Int) async throws -> Paging<Repository>
 }
 
 struct RepoRepositoryImpl: RepoRepository {
     
-    func fetch(userName: String) async throws -> [Repository] {
+    func fetch(userName: String, page: Int) async throws -> Paging<Repository> {
         let urlString = "https://api.github.com/users/\(userName)/repos"
         
         guard let url = URL(string: urlString) else {
             fatalError() // TODO
         }
-        
-        var request = URLRequest(url: url)
+
+        let queryAddedURL = url
+            .appending(queryItems: [.init(name: "page", value: "\(page)")])
+
+        var request = URLRequest(url: queryAddedURL)
         request.httpMethod = "GET"
         //        request.setValue("token \(token)", forHTTPHeaderField: "Authorization") // TODO:
         
@@ -30,19 +33,23 @@ struct RepoRepositoryImpl: RepoRepository {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let repositoriesResponse = try decoder.decode([RepositoryResponse].self, from: data)
-        return repositoriesResponse.map { $0.toModel() }
+
+        let linkHeader = (response as? HTTPURLResponse)?.allHeaderFields["Link"] as? String
+        let hasNextPage = linkHeader?.contains("rel=\"next\"") ?? false
+
+        return .init(list: repositoriesResponse.map { $0.toModel() }, hasNext: hasNextPage)
     }
 }
 
 struct MockRepoRepository: RepoRepository {
-    func fetch(userName: String) async throws -> [Repository] {
+    func fetch(userName: String, page: Int) async throws -> Paging<Repository> {
         try! await Task.sleep(for: .seconds(1))
 
-        return [
+        return .init(list: [
             .make(),
             .make(),
             .make(),
             .make()
-        ]
+        ], hasNext: false)
     }
 }
