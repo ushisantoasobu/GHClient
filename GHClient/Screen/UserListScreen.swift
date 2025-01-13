@@ -76,14 +76,6 @@ struct UserListView: View {
     }
 }
 
-// TODO: 共通化
-struct ListLoadingView: View {
-
-    var body: some View {
-        ProgressView()
-    }
-}
-
 #Preview {
     // memo: https://stackoverflow.com/questions/56613157/enable-keyboard-in-xcode-preview
     UserListScreen()
