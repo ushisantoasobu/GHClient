@@ -30,7 +30,9 @@ struct UserRepoRepositoryImpl: UserRepository {
 
         var request = URLRequest(url: queryAddedURL)
         request.httpMethod = "GET"
-        //        request.setValue("token \(token)", forHTTPHeaderField: "Authorization") // TODO:
+        if let pat = GitHubAPIHelper.getPAT() {
+            request.setValue("token \(pat)", forHTTPHeaderField: "Authorization")
+        }
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
@@ -58,9 +60,11 @@ struct UserDetailRepositoryImpl: UserDetailRepository {
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-//        request.setValue("token \(token)", forHTTPHeaderField: "Authorization") // TODO:
+        if let pat = GitHubAPIHelper.getPAT() {
+            request.setValue("token \(pat)", forHTTPHeaderField: "Authorization")
+        }
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, _) = try await URLSession.shared.data(for: request)
 
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase

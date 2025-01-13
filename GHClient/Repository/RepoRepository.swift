@@ -26,8 +26,10 @@ struct RepoRepositoryImpl: RepoRepository {
 
         var request = URLRequest(url: queryAddedURL)
         request.httpMethod = "GET"
-        //        request.setValue("token \(token)", forHTTPHeaderField: "Authorization") // TODO:
-        
+        if let pat = GitHubAPIHelper.getPAT() {
+            request.setValue("token \(pat)", forHTTPHeaderField: "Authorization")
+        }
+
         let (data, response) = try await URLSession.shared.data(for: request)
         
         let decoder = JSONDecoder()
