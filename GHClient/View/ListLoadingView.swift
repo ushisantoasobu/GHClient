@@ -10,6 +10,10 @@ import SwiftUI
 struct ListLoadingView: View {
 
     var body: some View {
-        ProgressView()
+        HStack {
+            Spacer()
+            ProgressView()
+            Spacer()
+        }
     }
 }

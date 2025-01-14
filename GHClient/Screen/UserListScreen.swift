@@ -70,6 +70,7 @@ struct UserListView: View {
             HStack {
                 UserThumbnailView(urlString: user.imageURLString, size: 44)
                 Text(user.name)
+                    .font(.title3)
             }
             .padding()
 

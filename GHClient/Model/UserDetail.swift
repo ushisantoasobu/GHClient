@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UserDetail: Identifiable {
+struct UserDetail: Identifiable, Equatable {
     let id: Int
     let imageURLString: String
     let name: String
@@ -26,6 +26,17 @@ extension UserDetail {
             fullName: "佐藤 俊輔",
             followerCount: 12,
             followingCount: 4
+        )
+    }
+
+    static func empty() -> UserDetail {
+        .init(
+            id: 0,
+            imageURLString: "",
+            name: "some name",
+            fullName: "some full name",
+            followerCount: 99,
+            followingCount: 99
         )
     }
 }

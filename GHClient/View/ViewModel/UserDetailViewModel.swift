@@ -11,7 +11,7 @@ import SwiftUI
 @MainActor
 class UserDetailViewModel: ObservableObject {
 
-    @Published var userDetail: UserDetail?
+    @Published var userDetail: UserDetail = .empty()
     @Published var repositories: [Repository] = []
     @Published var hasNext = false
 
