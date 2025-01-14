@@ -30,10 +30,12 @@ struct UserListScreen: View {
                             } label: {
                                 UserListView(user: user)
                             }
+                            .listRowSeparator(.hidden)
                         }
 
                         if viewModel.hasNext {
                             ListLoadingView()
+                                .listRowSeparator(.hidden)
                                 .onAppear {
                                     viewModel.onScrollToBottom()
                                 }
@@ -63,9 +65,13 @@ struct UserListView: View {
     let user: User
 
     var body: some View {
-        HStack {
-            UserThumbnailView(urlString: user.imageURLString, size: 44)
-            Text(user.name)
+        VStack(alignment: .leading) {
+            HStack {
+                UserThumbnailView(urlString: user.imageURLString, size: 44)
+                Text(user.name)
+            }
+
+            Divider()
         }
     }
 }
