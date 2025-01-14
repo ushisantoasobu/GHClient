@@ -11,16 +11,11 @@ struct GitHubAPIHelper {
 
     // TODO: キャッシュさせるのと整理
     static func getPAT() -> String? {
-        guard let path = Bundle.main.path(forResource: ".env", ofType: nil) else {
-            return nil
-        }
-        let url = URL(fileURLWithPath: path)
-        do {
-            let data = try Data(contentsOf: url)
-            guard let str = String(data: data, encoding: .utf8) else { return nil }
-            let components = str.split(separator: "=", maxSplits: 1)
-            return components[1].trimmingCharacters(in: .whitespaces)
-        } catch {
+        if let pat = EnvService.shared.getGitHubPAT() {
+            print("PAT is correctly set")
+            return pat
+        } else {
+            print("PAT is not set")
             return nil
         }
     }
