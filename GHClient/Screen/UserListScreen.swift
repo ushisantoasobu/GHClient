@@ -22,6 +22,15 @@ struct UserListScreen: View {
             Group {
                 if viewModel.users.isEmpty && viewModel.isFetching {
                     ProgressView()
+                } else if viewModel.noData && !viewModel.searchText.isEmpty {
+                    VStack(spacing: 16) {
+                        Image(systemName: "magnifyingglass")
+                            .resizable()
+                            .frame(width: 48, height: 48)
+
+                        Text("\"\(viewModel.searchText)\"の検索結果なし")
+                    }
+                    .foregroundStyle(.gray)
                 } else {
                     List {
                         ForEach(viewModel.users) { user in
@@ -54,7 +63,7 @@ struct UserListScreen: View {
                 }
             }
         }
-        .searchable(text: $viewModel.searchText)
+        .searchable(text: $viewModel.searchText, isPresented: $viewModel.isSearchFocusing)
         .onSubmit(of: .search) {
             viewModel.onSearch()
         }
