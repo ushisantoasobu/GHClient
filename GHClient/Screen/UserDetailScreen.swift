@@ -122,12 +122,12 @@ class UserDetailViewModel: ObservableObject {
     }
 
     func onAppear() async {
-        await fetch()
+        await fetchInitially()
     }
 
     func onScrollToBottom() {
         Task {
-            await fetch()
+            await fetchRepositories()
         }
     }
 
@@ -135,7 +135,7 @@ class UserDetailViewModel: ObservableObject {
         presentingRepository = repository
     }
 
-    private func fetch() async {
+    private func fetchInitially() async {
         do {
             async let userDetail = try await userDetailRepository.fetch(userName: userName)
             async let repositories = try await repoRepository.fetch(userName: userName, page: page)
@@ -144,6 +144,18 @@ class UserDetailViewModel: ObservableObject {
 
             let repositoriesResponse = try await repositories
             self.repositories = repositoriesResponse.list
+            hasNext = repositoriesResponse.hasNext
+            page += 1
+        } catch {
+            // TODO
+            print("userDetailAPI: \(error)")
+        }
+    }
+
+    private func fetchRepositories() async {
+        do {
+            let repositoriesResponse = try await repoRepository.fetch(userName: userName, page: page)
+            self.repositories.append(contentsOf: repositoriesResponse.list)
             hasNext = repositoriesResponse.hasNext
             page += 1
         } catch {
