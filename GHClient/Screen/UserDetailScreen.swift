@@ -62,23 +62,36 @@ struct UserDetailScreen: View {
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
 
-            ForEach(viewModel.repositories) { repository in
-                Button {
-                    viewModel.onRepositoryTapped(repository: repository)
-                } label: {
-                    UserDetailRepositoryView(repository: repository)
+            if viewModel.hasNoRepositories {
+                HStack {
+                    Spacer()
+                    Text("レポジトリは存在しません")
+                        .foregroundStyle(.gray)
+                    Spacer()
                 }
+                .frame(minHeight: 100)
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)
-            }
+            } else {
 
-            if viewModel.hasNext {
-                ListLoadingView()
+                ForEach(viewModel.repositories) { repository in
+                    Button {
+                        viewModel.onRepositoryTapped(repository: repository)
+                    } label: {
+                        UserDetailRepositoryView(repository: repository)
+                    }
                     .listRowInsets(EdgeInsets())
                     .listRowSeparator(.hidden)
-                    .onAppear {
-                        viewModel.onScrollToBottom()
-                    }
+                }
+
+                if viewModel.hasNext {
+                    ListLoadingView()
+                        .listRowInsets(EdgeInsets())
+                        .listRowSeparator(.hidden)
+                        .onAppear {
+                            viewModel.onScrollToBottom()
+                        }
+                }
             }
         }
         .listStyle(.plain)

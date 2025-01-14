@@ -14,6 +14,7 @@ class UserDetailViewModel: ObservableObject {
     @Published var userDetail: UserDetail = .empty()
     @Published var repositories: [Repository] = []
     @Published var hasNext = false
+    @Published var hasNoRepositories = false
 
     @Published var presentingRepository: Repository?
 
@@ -57,6 +58,7 @@ class UserDetailViewModel: ObservableObject {
             let repositoriesResponse = try await repositories
             self.repositories = repositoriesResponse.list
             hasNext = repositoriesResponse.hasNext
+            if self.repositories.isEmpty { hasNoRepositories = true }
             page += 1
         } catch {
             // TODO
