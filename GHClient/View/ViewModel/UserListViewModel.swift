@@ -40,6 +40,9 @@ class UserListViewModel: ObservableObject {
 
     private func fetch(refresh: Bool) async {
         isFetching = true
+
+        if refresh { page = 1 }
+
         do {
             let response = try await userRepository.fetch(userName: searchText, page: page)
             if refresh {
