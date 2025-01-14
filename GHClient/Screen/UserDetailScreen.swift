@@ -49,6 +49,8 @@ struct UserDetailScreen: View {
                 } label: {
                     UserDetailRepositoryView(repository: repository)
                 }
+                .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
             }
 
             if viewModel.hasNext {
@@ -78,16 +80,21 @@ struct UserDetailRepositoryView: View {
     let repository: Repository
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(repository.name)
+        VStack(spacing: 0) {
+            VStack(alignment: .leading) {
+                Text(repository.name)
 
-            HStack {
-                Text("\(repository.starCount)")
-                Text(repository.language ?? "-")
+                HStack {
+                    Text("\(repository.starCount)")
+                    Text(repository.language ?? "-")
+                }
+
+                Text(repository.description ?? "-")
+                    .lineLimit(2)
             }
+            .padding()
 
-            Text(repository.description ?? "-")
-                .lineLimit(2)
+            Divider()
         }
     }
 }

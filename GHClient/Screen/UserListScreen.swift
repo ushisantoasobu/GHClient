@@ -30,6 +30,7 @@ struct UserListScreen: View {
                             } label: {
                                 UserListView(user: user)
                             }
+                            .listRowInsets(EdgeInsets())
                             .listRowSeparator(.hidden)
                         }
 
@@ -65,11 +66,12 @@ struct UserListView: View {
     let user: User
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 UserThumbnailView(urlString: user.imageURLString, size: 44)
                 Text(user.name)
             }
+            .padding()
 
             Divider()
         }
