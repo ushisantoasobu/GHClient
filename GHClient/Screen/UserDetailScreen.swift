@@ -21,13 +21,7 @@ struct UserDetailScreen: View {
                 HStack {
                     Spacer()
                     VStack {
-                        if let url = URL(string: userDetail.imageURLString) {
-                            AsyncImage(url: url)
-                                .frame(width: 80, height: 80)
-                                .clipped()
-                        } else {
-                            
-                        }
+                        UserThumbnailView(urlString: userDetail.imageURLString, size: 80)
 
                         Text(userDetail.name)
 
