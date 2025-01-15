@@ -14,7 +14,7 @@ struct Repository: Identifiable {
     let starCount: Int
     let description: String?
     let urlString: String
-    let isFolked: Bool
+    let isForked: Bool
 }
 
 extension Repository {
@@ -26,7 +26,7 @@ extension Repository {
             starCount: 12345,
             description: "Alamofire is an HTTP networking library written in Swift.",
             urlString: "https://github.com/Alamofire/Alamofire",
-            isFolked: false
+            isForked: false
         )
     }
 }

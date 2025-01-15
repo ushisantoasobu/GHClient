@@ -56,7 +56,7 @@ class UserDetailViewModel: ObservableObject {
             self.userDetail = try await userDetail
 
             let repositoriesResponse = try await repositories
-            self.repositories = repositoriesResponse.list
+            self.repositories = filterRepositories(repositories: repositoriesResponse.list)
             hasNext = repositoriesResponse.hasNext
             if self.repositories.isEmpty { hasNoRepositories = true }
             page += 1
@@ -69,12 +69,16 @@ class UserDetailViewModel: ObservableObject {
     private func fetchRepositories() async {
         do {
             let repositoriesResponse = try await repoRepository.fetch(userName: userName, page: page)
-            self.repositories.append(contentsOf: repositoriesResponse.list)
+            self.repositories.append(contentsOf: filterRepositories(repositories: repositoriesResponse.list))
             hasNext = repositoriesResponse.hasNext
             page += 1
         } catch {
             // TODO
             print("userDetailAPI: \(error)")
         }
+    }
+
+    private func filterRepositories(repositories: [Repository]) -> [Repository] {
+        repositories.filter { $0.isForked == false }
     }
 }

@@ -86,6 +86,7 @@ struct UserDetailScreen: View {
 
                 if viewModel.hasNext {
                     ListLoadingView()
+                        .id(UUID())
                         .listRowInsets(EdgeInsets())
                         .listRowSeparator(.hidden)
                         .onAppear {

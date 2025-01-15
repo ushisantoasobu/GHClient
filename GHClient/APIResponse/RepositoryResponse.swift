@@ -27,7 +27,7 @@ struct RepositoryResponse: Decodable {
             starCount: stargazersCount,
             description: description,
             urlString: htmlUrl,
-            isFolked: fork
+            isForked: fork
         )
     }
 }

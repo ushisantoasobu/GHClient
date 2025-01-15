@@ -45,6 +45,7 @@ struct UserListScreen: View {
 
                         if viewModel.hasNext {
                             ListLoadingView()
+                                .id(UUID()) // ref: https://stackoverflow.com/a/75431883
                                 .listRowSeparator(.hidden)
                                 .onAppear {
                                     viewModel.onScrollToBottom()

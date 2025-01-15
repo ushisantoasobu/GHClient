@@ -21,8 +21,11 @@ struct RepoRepositoryImpl: RepoRepository {
             fatalError() // TODO
         }
 
+        // 更新順（降順）で取得する
         let queryAddedURL = url
             .appending(queryItems: [.init(name: "page", value: "\(page)")])
+            .appending(queryItems: [.init(name: "sort", value: "updated")])
+            .appending(queryItems: [.init(name: "direction", value: "desc")])
 
         var request = URLRequest(url: queryAddedURL)
         request.httpMethod = "GET"
@@ -31,7 +34,7 @@ struct RepoRepositoryImpl: RepoRepository {
         }
 
         let (data, response) = try await URLSession.shared.data(for: request)
-        
+
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let repositoriesResponse = try decoder.decode([RepositoryResponse].self, from: data)
