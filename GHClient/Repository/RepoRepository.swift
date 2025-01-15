@@ -11,18 +11,3 @@ import Foundation
 protocol RepoRepository {
     func fetch(userName: String, page: Int) async throws -> Paging<Repository>
 }
-
-
-
-struct MockRepoRepository: RepoRepository {
-    func fetch(userName: String, page: Int) async throws -> Paging<Repository> {
-        try! await Task.sleep(for: .seconds(1))
-
-        return .init(list: [
-            .make(),
-            .make(),
-            .make(),
-            .make()
-        ], hasNext: false)
-    }
-}

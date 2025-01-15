@@ -16,17 +16,3 @@ struct Repository: Identifiable {
     let urlString: String
     let isForked: Bool
 }
-
-extension Repository {
-    static func make() -> Repository {
-        .init(
-            id: Int.random(in: 0...1_000_000),
-            name: "Alamofire",
-            language: "Swiift",
-            starCount: 12345,
-            description: "Alamofire is an HTTP networking library written in Swift.",
-            urlString: "https://github.com/Alamofire/Alamofire",
-            isForked: false
-        )
-    }
-}

@@ -18,17 +18,6 @@ struct UserDetail: Identifiable, Equatable {
 
 extension UserDetail {
     
-    static func make() -> UserDetail {
-        .init(
-            id: Int.random(in: 0...1_000_000),
-            imageURLString: "https://picsum.photos/120/120",
-            name: "ushisantoasobu",
-            fullName: "佐藤 俊輔",
-            followerCount: 12,
-            followingCount: 4
-        )
-    }
-
     static func empty() -> UserDetail {
         .init(
             id: 0,
