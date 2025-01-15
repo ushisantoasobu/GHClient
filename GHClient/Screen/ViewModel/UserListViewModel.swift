@@ -56,6 +56,7 @@ class UserListViewModel: ObservableObject {
         if refresh {
             page = 1
             noData = false
+            users = []
         }
 
         do {
