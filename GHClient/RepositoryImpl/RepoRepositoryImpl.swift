@@ -13,7 +13,8 @@ struct RepoRepositoryImpl: RepoRepository {
         let urlString = "https://api.github.com/users/\(userName)/repos"
         
         guard let url = URL(string: urlString) else {
-            fatalError() // TODO
+            NonFatalErrorLogger().log(error: NonFatalError.failedToCreateGitHubAPIURL)
+            throw NonFatalError.failedToCreateGitHubAPIURL
         }
 
         // 更新順（降順）で取得する

@@ -17,14 +17,14 @@ class EnvService {
 
     func configure() {
         guard let path = Bundle.main.path(forResource: ".env", ofType: nil) else {
-            // TODO: logging
+            NonFatalErrorLogger().log(error: .failedToSetUpEnv)
             return
         }
         let url = URL(fileURLWithPath: path)
         do {
             let data = try Data(contentsOf: url)
             guard let string = String(data: data, encoding: .utf8) else {
-                // TODO: logging
+                NonFatalErrorLogger().log(error: .failedToSetUpEnv)
                 return
             }
             let lines = string.split(separator: "\n")
@@ -33,7 +33,7 @@ class EnvService {
                 dic[components[0].trimmingCharacters(in: .whitespaces)] = components[1].trimmingCharacters(in: .whitespaces)
             }
         } catch {
-            // TODO: logging
+            NonFatalErrorLogger().log(error: .failedToSetUpEnv)
             return
         }
     }

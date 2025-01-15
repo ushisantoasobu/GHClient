@@ -62,8 +62,8 @@ struct UserDetailScreen: View {
             if let url = URL(string: repository.urlString) {
                 SafariViewRepresentable(url: url)
             } else {
-                // TODO: logging
                 EmptyView()
+                    .onAppear { NonFatalErrorLogger().log(error: .failedToShowRepositoryDetail) }
             }
         })
 

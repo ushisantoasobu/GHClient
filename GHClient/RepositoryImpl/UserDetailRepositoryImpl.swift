@@ -13,7 +13,8 @@ struct UserDetailRepositoryImpl: UserDetailRepository {
         let urlString = "https://api.github.com/users/\(userName)"
 
         guard let url = URL(string: urlString) else {
-            fatalError() // TODO
+            NonFatalErrorLogger().log(error: NonFatalError.failedToCreateGitHubAPIURL)
+            throw NonFatalError.failedToCreateGitHubAPIURL
         }
 
         var request = URLRequest(url: url)
