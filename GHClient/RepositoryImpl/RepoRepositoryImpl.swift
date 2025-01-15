@@ -34,9 +34,9 @@ struct RepoRepositoryImpl: RepoRepository {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let repositoriesResponse = try decoder.decode([RepositoryResponse].self, from: data)
 
-        let linkHeader = (response as? HTTPURLResponse)?.allHeaderFields["Link"] as? String
-        let hasNextPage = linkHeader?.contains("rel=\"next\"") ?? false
-
-        return .init(list: repositoriesResponse.map { $0.toModel() }, hasNext: hasNextPage)
+        return .init(
+            list: repositoriesResponse.map { $0.toModel() },
+            hasNext: GitHubAPIHelper.checkHasNextPage(response: response)
+        )
     }
 }

@@ -32,9 +32,9 @@ struct UserRepositoryImpl: UserRepository {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let usersResponse = try decoder.decode(UsersResponse.self, from: data)
 
-        let linkHeader = (response as? HTTPURLResponse)?.allHeaderFields["Link"] as? String
-        let hasNextPage = linkHeader?.contains("rel=\"next\"") ?? false
-
-        return .init(list: usersResponse.toModel(), hasNext: hasNextPage)
+        return .init(
+            list: usersResponse.toModel(),
+            hasNext: GitHubAPIHelper.checkHasNextPage(response: response)
+        )
     }
 }

@@ -18,4 +18,9 @@ struct GitHubAPIHelper {
             return nil
         }
     }
+
+    static func checkHasNextPage(response: URLResponse) -> Bool {
+        let linkHeader = (response as? HTTPURLResponse)?.allHeaderFields["Link"] as? String
+        return linkHeader?.contains("rel=\"next\"") ?? false
+    }
 }
