@@ -25,7 +25,7 @@ class UserListViewModel: ObservableObject {
 
     private var cancellables = Set<AnyCancellable>()
 
-    init(userRepository: any UserRepository = UserRepoRepositoryImpl()) {
+    init(userRepository: any UserRepository = UserRepositoryImpl()) {
         self.userRepository = userRepository
 
         $searchText
