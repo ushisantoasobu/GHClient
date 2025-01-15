@@ -17,50 +17,10 @@ struct UserDetailScreen: View {
 
     var body: some View {
         List {
-            HStack {
-                Spacer()
-
-                VStack(spacing: 12) {
-                    UserThumbnailView(urlString: viewModel.userDetail.imageURLString, size: 80)
-
-                    VStack(spacing: 2) {
-                        Text(viewModel.userDetail.fullName ?? "-")
-                            .font(.title)
-                            .fontWeight(.bold)
-
-                        Text(viewModel.userDetail.name)
-                            .font(.title2)
-                    }
-
-                    HStack(spacing: 32) {
-                        VStack {
-                            Text("\(viewModel.userDetail.followerCount)")
-                                .font(.title3)
-
-                            Text("フォロワー数")
-                                .font(.footnote)
-                                .foregroundStyle(.gray)
-                        }
-
-                        Divider()
-
-                        VStack {
-                            Text("\(viewModel.userDetail.followingCount)")
-                                .font(.title3)
-
-                            Text("フォロイー数")
-                                .font(.footnote)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                }
-                .redacted(reason: viewModel.userDetail == UserDetail.empty() ? .placeholder : [])
-
-                Spacer()
-            }
-            .padding()
-            .listRowInsets(EdgeInsets())
-            .listRowSeparator(.hidden)
+            UserDetailUserView(userDetail: viewModel.userDetail)
+                .padding()
+                .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
 
             if viewModel.hasNoRepositories {
                 HStack {
@@ -125,7 +85,56 @@ struct UserDetailScreen: View {
     }
 }
 
-struct UserDetailRepositoryView: View {
+private struct UserDetailUserView: View {
+
+    let userDetail: UserDetail
+
+    var body: some View {
+        HStack {
+            Spacer()
+
+            VStack(spacing: 12) {
+                UserThumbnailView(urlString: userDetail.imageURLString, size: 80)
+
+                VStack(spacing: 2) {
+                    Text(userDetail.fullName ?? "-")
+                        .font(.title)
+                        .fontWeight(.bold)
+
+                    Text(userDetail.name)
+                        .font(.title2)
+                }
+
+                HStack(spacing: 32) {
+                    VStack {
+                        Text("\(userDetail.followerCount)")
+                            .font(.title3)
+
+                        Text("フォロワー数")
+                            .font(.footnote)
+                            .foregroundStyle(.gray)
+                    }
+
+                    Divider()
+
+                    VStack {
+                        Text("\(userDetail.followingCount)")
+                            .font(.title3)
+
+                        Text("フォロイー数")
+                            .font(.footnote)
+                            .foregroundStyle(.gray)
+                    }
+                }
+            }
+            .redacted(reason: userDetail == UserDetail.empty() ? .placeholder : [])
+
+            Spacer()
+        }
+    }
+}
+
+private struct UserDetailRepositoryView: View {
 
     let repository: Repository
 

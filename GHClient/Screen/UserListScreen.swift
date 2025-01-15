@@ -79,7 +79,7 @@ struct UserListScreen: View {
     }
 }
 
-struct UserListView: View {
+private struct UserListView: View {
 
     let user: User
 
