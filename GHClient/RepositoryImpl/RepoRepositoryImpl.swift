@@ -30,9 +30,7 @@ struct RepoRepositoryImpl: RepoRepository {
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let repositoriesResponse = try decoder.decode([RepositoryResponse].self, from: data)
+        let repositoriesResponse = try apiDecoder.decode([RepositoryResponse].self, from: data)
 
         return .init(
             list: repositoriesResponse.map { $0.toModel() },

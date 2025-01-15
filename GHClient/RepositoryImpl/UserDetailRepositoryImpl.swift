@@ -24,9 +24,7 @@ struct UserDetailRepositoryImpl: UserDetailRepository {
 
         let (data, _) = try await URLSession.shared.data(for: request)
 
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let userDetailResponse = try decoder.decode(UserDetailResponse.self, from: data)
+        let userDetailResponse = try apiDecoder.decode(UserDetailResponse.self, from: data)
         return userDetailResponse.toModel()
     }
 }
