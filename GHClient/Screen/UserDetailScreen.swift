@@ -96,6 +96,8 @@ struct UserDetailScreen: View {
             }
         }
         .listStyle(.plain)
+
+        // レポジトリ詳細モーダル
         .sheet(item: $viewModel.presentingRepository, content: { repository in
             if let url = URL(string: repository.urlString) {
                 SafariViewRepresentable(url: url)
@@ -104,6 +106,16 @@ struct UserDetailScreen: View {
                 EmptyView()
             }
         })
+
+        // error alert
+        .alert("エラーが発生しました", isPresented: .constant(viewModel.fetchError != nil)) {
+            Button("OK") {
+                viewModel.fetchError = nil
+            }
+        } message: {
+            Text(viewModel.fetchError?.localizedDescription ?? "原因不明のエラーが発生しました")
+        }
+
         .task {
             await viewModel.onAppear()
         }

@@ -17,6 +17,7 @@ class UserListViewModel: ObservableObject {
     @Published var isFetching = false
     @Published var hasNext = false
     @Published var noData = false
+    @Published var fetchError: Error?
 
     private let userRepository: any UserRepository
 
@@ -73,7 +74,7 @@ class UserListViewModel: ObservableObject {
         } catch {
             hasNext = false
             isFetching = false
-            print(error)
+            fetchError = error
         }
     }
 }

@@ -15,6 +15,7 @@ class UserDetailViewModel: ObservableObject {
     @Published var repositories: [Repository] = []
     @Published var hasNext = false
     @Published var hasNoRepositories = false
+    @Published var fetchError: Error?
 
     @Published var presentingRepository: Repository?
 
@@ -61,8 +62,8 @@ class UserDetailViewModel: ObservableObject {
             if self.repositories.isEmpty { hasNoRepositories = true }
             page += 1
         } catch {
-            // TODO
-            print("userDetailAPI: \(error)")
+            hasNext = false
+            fetchError = error
         }
     }
 
@@ -73,8 +74,8 @@ class UserDetailViewModel: ObservableObject {
             hasNext = repositoriesResponse.hasNext
             page += 1
         } catch {
-            // TODO
-            print("userDetailAPI: \(error)")
+            hasNext = false
+            fetchError = error
         }
     }
 

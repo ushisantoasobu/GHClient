@@ -55,6 +55,7 @@ struct UserListScreen: View {
                     .listStyle(.plain)
                 }
             }
+            // navigation
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("ユーザ一覧")
             .navigationDestination(for: ScreenPath.self) { path in
@@ -67,6 +68,14 @@ struct UserListScreen: View {
         .searchable(text: $viewModel.searchText, isPresented: $viewModel.isSearchFocusing)
         .onSubmit(of: .search) {
             viewModel.onSearch()
+        }
+        // error alert
+        .alert("エラーが発生しました", isPresented: .constant(viewModel.fetchError != nil)) {
+            Button("OK") {
+                viewModel.fetchError = nil
+            }
+        } message: {
+            Text(viewModel.fetchError?.localizedDescription ?? "原因不明のエラーが発生しました")
         }
     }
 }
