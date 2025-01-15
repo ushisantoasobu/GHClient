@@ -57,7 +57,6 @@ struct UserListScreen: View {
             }
             // navigation
             .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle("ユーザ一覧")
             .navigationDestination(for: ScreenPath.self) { path in
                 switch path {
                 case .userDetail(let userName):

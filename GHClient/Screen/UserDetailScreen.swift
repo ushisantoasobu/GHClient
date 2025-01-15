@@ -116,6 +116,9 @@ struct UserDetailScreen: View {
             Text(viewModel.fetchError?.localizedDescription ?? "原因不明のエラーが発生しました")
         }
 
+        // workaround: 戻るボタンの文字を消す ref: https://stackoverflow.com/a/75156026
+        .toolbarRole(.editor)
+
         .task {
             await viewModel.onAppear()
         }
