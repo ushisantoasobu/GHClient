@@ -43,8 +43,6 @@ struct UserRepoRepositoryImpl: UserRepository {
         let linkHeader = (response as? HTTPURLResponse)?.allHeaderFields["Link"] as? String
         let hasNextPage = linkHeader?.contains("rel=\"next\"") ?? false
 
-        print("@@@@@ hasNextPage: \(hasNextPage)")
-
         return .init(list: usersResponse.toModel(), hasNext: hasNextPage)
     }
 }

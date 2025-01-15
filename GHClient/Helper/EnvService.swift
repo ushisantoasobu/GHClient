@@ -36,8 +36,6 @@ class EnvService {
             // TODO: logging
             return
         }
-
-        print("@@@@@ EnvService: \(dic)")
     }
 
     func getGitHubPAT() -> String? {
