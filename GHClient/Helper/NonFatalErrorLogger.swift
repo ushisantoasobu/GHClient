@@ -13,7 +13,7 @@ enum NonFatalError: LocalizedError {
     case failedToShowRepositoryDetail
 
     var errorDescription: String? {
-        "原因不明のエラーが発生しました"
+        String(localized: "Error.Message.Unknown")
     }
 }
 

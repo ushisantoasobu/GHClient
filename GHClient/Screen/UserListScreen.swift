@@ -28,7 +28,7 @@ struct UserListScreen: View {
                             .resizable()
                             .frame(width: 48, height: 48)
 
-                        Text("\"\(viewModel.searchText)\"の検索結果なし")
+                        Text(String(localized: "UserListScreen.Text.NoData \(viewModel.searchText)"))
                     }
                     .foregroundStyle(.gray)
                 } else {
@@ -69,12 +69,12 @@ struct UserListScreen: View {
             viewModel.onSearch()
         }
         // error alert
-        .alert("エラーが発生しました", isPresented: .constant(viewModel.fetchError != nil)) {
-            Button("OK") {
+        .alert("Common.Error.Title", isPresented: .constant(viewModel.fetchError != nil)) {
+            Button("Common.OK") {
                 viewModel.fetchError = nil
             }
         } message: {
-            Text(viewModel.fetchError?.localizedDescription ?? "原因不明のエラーが発生しました")
+            Text(viewModel.fetchError?.localizedDescription ?? "Error.Message.Unknown")
         }
     }
 }

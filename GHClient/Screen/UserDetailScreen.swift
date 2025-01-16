@@ -25,7 +25,7 @@ struct UserDetailScreen: View {
             if viewModel.hasNoRepositories {
                 HStack {
                     Spacer()
-                    Text("レポジトリは存在しません")
+                    Text("UserDetailScreen.Text.NoRepositories")
                         .foregroundStyle(.gray)
                     Spacer()
                 }
@@ -68,12 +68,12 @@ struct UserDetailScreen: View {
         })
 
         // error alert
-        .alert("エラーが発生しました", isPresented: .constant(viewModel.fetchError != nil)) {
-            Button("OK") {
+        .alert("Common.Error.Title", isPresented: .constant(viewModel.fetchError != nil)) {
+            Button("Common.OK") {
                 viewModel.fetchError = nil
             }
         } message: {
-            Text(viewModel.fetchError?.localizedDescription ?? "原因不明のエラーが発生しました")
+            Text(viewModel.fetchError?.localizedDescription ?? "Error.Message.Unknown")
         }
 
         // workaround: 戻るボタンの文字を消す ref: https://stackoverflow.com/a/75156026
@@ -110,7 +110,7 @@ private struct UserDetailUserView: View {
                         Text("\(userDetail.followerCount)")
                             .font(.title3)
 
-                        Text("フォロワー数")
+                        Text("UserDetailScreen.Text.FollowerCount")
                             .font(.footnote)
                             .foregroundStyle(.gray)
                     }
@@ -121,7 +121,7 @@ private struct UserDetailUserView: View {
                         Text("\(userDetail.followingCount)")
                             .font(.title3)
 
-                        Text("フォロイー数")
+                        Text("UserDetailScreen.Text.FollowingCount")
                             .font(.footnote)
                             .foregroundStyle(.gray)
                     }
@@ -149,7 +149,7 @@ private struct UserDetailRepositoryView: View {
                         Image(systemName: "star")
                         Text("\(repository.starCount)")
                     }
-                    Text("/")
+                    Text("Common.Slash")
                     Text(repository.language ?? "-")
                 }
                 .font(.footnote)

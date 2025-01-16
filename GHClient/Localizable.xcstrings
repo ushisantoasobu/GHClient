@@ -1,0 +1,90 @@
+{
+  "sourceLanguage" : "ja",
+  "strings" : {
+    "%lld" : {
+
+    },
+    "Common.Error.Title" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エラーが発生しました"
+          }
+        }
+      }
+    },
+    "Common.OK" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "Common.Slash" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/"
+          }
+        }
+      }
+    },
+    "Error.Message.Unknown" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "原因不明のエラーが発生しました"
+          }
+        }
+      }
+    },
+    "UserDetailScreen.Text.FollowerCount" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フォロワー数"
+          }
+        }
+      }
+    },
+    "UserDetailScreen.Text.FollowingCount" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フォロイー数"
+          }
+        }
+      }
+    },
+    "UserDetailScreen.Text.NoRepositories" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レポジトリは存在しません"
+          }
+        }
+      }
+    },
+    "UserListScreen.Text.NoData %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"%@\"の検索結果なし"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
